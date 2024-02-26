@@ -1,0 +1,49 @@
+version: "3.8"
+services:
+
+  # PHP Service
+  php:
+    build: './php_docker/'
+    volumes:
+      - ./www/:/var/www/html/
+      - ./custom-php.ini:/usr/local/etc/php/conf.d/custom-php.ini
+
+  # Caddy Service
+  caddy:
+    build: './caddy_docker/'
+    depends_on:
+      - php
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./www/:/var/www/html/
+      - ./caddy_docker/Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+
+  # MariaDB Service
+  mariadb:
+    image: mariadb:10.11
+    environment:
+      MYSQL_ROOT_PASSWORD: PyjbNnbmlh4kpRqltYpT
+    volumes:
+      - mysqldata:/var/lib/mysql
+
+  # phpMyAdmin Service
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    ports:
+      - 8080:80
+    environment:
+      PMA_HOST: mariadb
+    depends_on:
+      - mariadb
+
+# Volumes
+volumes:
+  mysqldata:
+  caddy_data:
+  caddy_config:

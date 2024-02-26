@@ -1,0 +1,14 @@
+vanill.at {
+    reverse_proxy php:9000 {
+        import php_common
+    }
+}
+
+(php_common) {
+    root * /var/www/html
+    file_server
+    php_fastcgi php:9000
+    log {
+        output stdout
+    }
+}
