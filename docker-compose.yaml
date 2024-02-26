@@ -1,0 +1,29 @@
+version: "3.8"
+services:
+
+  # PHP Service
+  php:
+    build: './php_docker/'
+    volumes:
+      - ./www/:/var/www/html/
+
+  # Caddy Service
+  caddy:
+    build: './caddy_docker/'
+    depends_on:
+      - php
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./www/:/var/www/html/
+      - ./caddy_docker/Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+
+# Volumes
+volumes:
+  caddy_data:
+  caddy_config:
