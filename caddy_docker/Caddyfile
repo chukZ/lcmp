@@ -1,0 +1,26 @@
+vanill.at {
+    encode gzip zstd
+    root * /var/www/html/public
+    php_fastcgi php:9000
+    file_server
+    header {
+        -server
+        -Link
+        -X-Powered-By
+
+        # disable FLoC tracking
+        #Permissions-Policy interest-cohort=()
+
+        # enable HSTS
+        Strict-Transport-Security max-age=31536000;
+
+        # disable clients from sniffing the media type
+        X-Content-Type-Options nosniff
+
+        # clickjacking protection
+        X-Frame-Options DENY
+
+       # keep referrer data off of HTTP connections
+       Referrer-Policy no-referrer-when-downgrade
+    }
+}
