@@ -27,7 +27,7 @@ services:
   mysql:
     image: mysql:8.0
     environment:
-      MYSQL_ROOT_PASSWORD: PyjbNnbmlh4kpRqltYpT
+      MYSQL_ROOT_PASSWORD: <redacted>
     volumes:
       - mysqldata:/var/lib/mysql
 
